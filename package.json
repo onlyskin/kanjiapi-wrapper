@@ -1,0 +1,15 @@
+{
+  "name": "kanjiapi-wrapper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "ospec",
+    "lint": "jshint *.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jshint": "^2.10.2",
+    "ospec": "^4.0.0"
+  }
+}

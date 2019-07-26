@@ -1,0 +1,11 @@
+{
+    "undef": true,
+    "unused": true,
+    "eqeqeq": true,
+    "globals": {
+        "module": true,
+        "require": true,
+        "document": true
+    },
+    "esversion": 8
+}
