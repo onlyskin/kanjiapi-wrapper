@@ -7,6 +7,6 @@ OUT_FILE=kanjiapi-wrapper.min.js
 
 rm $OUT_FILE
 $BABEL *[^test].js --preset=@babel/env --presets minify --out-dir $TEMPDIR
-$BROWSERIFY -o $OUT_FILE
+$BROWSERIFY --entry $TEMPDIR/browser.js --outfile $OUT_FILE
 
 rm -rf $TEMPDIR

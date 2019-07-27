@@ -1,6 +1,7 @@
 {
   "name": "kanjiapi-wrapper",
-  "version": "1.0.2",
+  "version": "1.0.4",
+  "unpkg": "kanjiapi-wrapper.min.js",
   "main": "kanjiapi-wrapper.js",
   "license": "MIT",
   "scripts": {
