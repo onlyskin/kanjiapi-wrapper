@@ -29,10 +29,10 @@ o.spec('ApiWrapper', () => {
 
         await response
         await json
-        apiWrapper.getJoyoList()
-        apiWrapper.getJinmeiyoList()
-        apiWrapper.getJoyoList()
-        apiWrapper.getJinmeiyoList()
+        apiWrapper.getJoyoSet()
+        apiWrapper.getJinmeiyoSet()
+        apiWrapper.getJoyoSet()
+        apiWrapper.getJinmeiyoSet()
 
         o(fetch.callCount).equals(2)
     })
@@ -40,13 +40,13 @@ o.spec('ApiWrapper', () => {
     o('returns HTTP error code as record', async () => {
         const { apiWrapper, fetch, response, json } = withFetchSpy(404, null)
 
-        o(apiWrapper.getJoyoList())
+        o(apiWrapper.getJoyoSet())
             .deepEquals({ status: 'LOADING', value: null })
 
         await response
         await json
 
-        o(apiWrapper.getJoyoList())
+        o(apiWrapper.getJoyoSet())
             .deepEquals({ status: 'ERROR', value: 404 })
     })
 
@@ -54,28 +54,32 @@ o.spec('ApiWrapper', () => {
         const { apiWrapper, fetch, response, json } = withFetchSpy(
             200, ['a', 'b', 'c'])
 
-        o(apiWrapper.getJoyoList())
+        o(apiWrapper.getJoyoSet())
             .deepEquals({ status: 'LOADING', value: null })
 
         await response
         await json
 
         o(fetch.calls[0].args[0]).equals('url/v1/kanji/joyo')
-        o(apiWrapper.getJoyoList())
-            .deepEquals({ status: 'SUCCESS', value: ['a', 'b', 'c'] })
+        const result = apiWrapper.getJoyoSet()
+        o(result.status).equals('SUCCESS')
+        o(result.value.size).equals(3)
+        o([...result.value]).deepEquals(['a', 'b', 'c'])
     })
 
     o('loads jinmeiyo kanji', async () => {
         const { apiWrapper, fetch, response, json } = withFetchSpy(
             200, [4, 5, 6])
 
-        apiWrapper.getJinmeiyoList()
+        apiWrapper.getJinmeiyoSet()
         await response
         await json
 
         o(fetch.calls[0].args[0]).equals('url/v1/kanji/jinmeiyo')
-        o(apiWrapper.getJinmeiyoList())
-            .deepEquals({ status: 'SUCCESS', value: [4, 5, 6] })
+        const result = apiWrapper.getJinmeiyoSet()
+        o(result.status).equals('SUCCESS')
+        o(result.value.size).equals(3)
+        o([...result.value]).deepEquals([4, 5, 6])
     })
 
     o('loads specific kanji', async () => {
@@ -116,15 +120,17 @@ o.spec('ApiWrapper', () => {
 
     o('loads grade 1 kanji list', async () => {
         const { apiWrapper, fetch, response, json } = withFetchSpy(
-            200, [1, 1, 1])
+            200, [1, 2, 3])
 
         apiWrapper.getListForGrade(1)
         await response
         await json
 
         o(fetch.calls[0].args[0]).equals('url/v1/kanji/grade-1')
-        o(apiWrapper.getListForGrade(1))
-            .deepEquals({ status: 'SUCCESS', value: [1, 1, 1] })
+        const result = apiWrapper.getListForGrade(1)
+        o(result.status).equals('SUCCESS')
+        o(result.value.size).equals(3)
+        o([...result.value]).deepEquals([1, 2, 3])
     })
 
     o('loads grade 2 kanji list', async () => {

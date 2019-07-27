@@ -58,16 +58,27 @@ class ApiWrapper {
         return this._fromCache(`/${READING_PATH}/${reading}`)
     }
 
-    getJoyoList() {
-        return this._fromCache(`/${KANJI_PATH}/joyo`)
+    _asSet(result) {
+        if (result.status === SUCCESS) {
+            return {
+                status: result.status,
+                value: new Set(result.value),
+            }
+        } else {
+            return result
+        }
     }
 
-    getJinmeiyoList() {
-        return this._fromCache(`/${KANJI_PATH}/jinmeiyo`)
+    getJoyoSet() {
+        return this._asSet(this._fromCache(`/${KANJI_PATH}/joyo`))
+    }
+
+    getJinmeiyoSet() {
+        return this._asSet(this._fromCache(`/${KANJI_PATH}/jinmeiyo`))
     }
 
     getListForGrade(grade) {
-        return this._fromCache(`/${KANJI_PATH}/grade-${grade}`)
+        return this._asSet(this._fromCache(`/${KANJI_PATH}/grade-${grade}`))
     }
 
     getWordsForKanji(kanji) {
