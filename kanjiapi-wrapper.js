@@ -1,4 +1,4 @@
-const { ApiWrapper } = require('./src/api_wrapper')
+const { ApiWrapper } = require('./api_wrapper')
 
 const API_URL = 'https://kanjiapi.dev'
 

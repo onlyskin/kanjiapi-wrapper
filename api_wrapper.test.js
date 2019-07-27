@@ -1,6 +1,6 @@
 const o = require('ospec')
 
-const { ApiWrapper } = require('../src/api_wrapper')
+const { ApiWrapper } = require('./api_wrapper')
 
 o.spec('ApiWrapper', () => {
     const apiUrl = 'url'
