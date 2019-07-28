@@ -16,6 +16,49 @@ class ApiWrapper {
         this._pending = new Set()
     }
 
+    getKanji(kanji) {
+        return this._fromCache(`/${KANJI_PATH}/${kanji}`)
+    }
+
+    getReading(reading) {
+        return this._fromCache(`/${READING_PATH}/${reading}`)
+    }
+
+    getJoyoSet() {
+        return this._asSet(this._fromCache(`/${KANJI_PATH}/joyo`))
+    }
+
+    getJinmeiyoSet() {
+        return this._asSet(this._fromCache(`/${KANJI_PATH}/jinmeiyo`))
+    }
+
+    getListForGrade(grade) {
+        return this._asSet(this._fromCache(`/${KANJI_PATH}/grade-${grade}`))
+    }
+
+    getWordsForKanji(kanji) {
+        return this._fromCache(`/${WORDS_PATH}/${kanji}`)
+    }
+
+    getUrl(url) {
+        return this._fromCache(url)
+    }
+
+    _fromCache(path) {
+        if (this._cache.has(path)) {
+            return this._cache.get(path)
+        }
+
+        if (!this._pending.has(path)) {
+            this._apiFetch(path)
+        }
+
+        return {
+            status: LOADING,
+            value: null,
+        }
+    }
+
     async _apiFetch(path) {
         this._pending.add(path)
 
@@ -35,29 +78,6 @@ class ApiWrapper {
         this._notify()
     }
 
-    _fromCache(path) {
-        if (this._cache.has(path)) {
-            return this._cache.get(path)
-        }
-
-        if (!this._pending.has(path)) {
-            this._apiFetch(path)
-        }
-
-        return {
-            status: LOADING,
-            value: null,
-        }
-    }
-
-    getKanji(kanji) {
-        return this._fromCache(`/${KANJI_PATH}/${kanji}`)
-    }
-
-    getReading(reading) {
-        return this._fromCache(`/${READING_PATH}/${reading}`)
-    }
-
     _asSet(result) {
         if (result.status === SUCCESS) {
             return {
@@ -67,22 +87,6 @@ class ApiWrapper {
         } else {
             return result
         }
-    }
-
-    getJoyoSet() {
-        return this._asSet(this._fromCache(`/${KANJI_PATH}/joyo`))
-    }
-
-    getJinmeiyoSet() {
-        return this._asSet(this._fromCache(`/${KANJI_PATH}/jinmeiyo`))
-    }
-
-    getListForGrade(grade) {
-        return this._asSet(this._fromCache(`/${KANJI_PATH}/grade-${grade}`))
-    }
-
-    getWordsForKanji(kanji) {
-        return this._fromCache(`/${WORDS_PATH}/${kanji}`)
     }
 }
 

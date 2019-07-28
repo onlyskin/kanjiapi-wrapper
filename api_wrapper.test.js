@@ -154,6 +154,19 @@ o.spec('ApiWrapper', () => {
             .deepEquals({ status: 'SUCCESS', value: ['a', 'b', 'c'] })
     })
 
+    o('loads arbitrary url', async() => {
+        const { apiWrapper, fetch, response, json } = withFetchSpy(
+            200, ['a', 'b', 'c'])
+
+        apiWrapper.getUrl('/kanji/蜜')
+        await response
+        await json
+
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/蜜')
+        o(apiWrapper.getUrl('/kanji/蜜'))
+            .deepEquals({ status: 'SUCCESS', value: ['a', 'b', 'c'] })
+    })
+
     o('calls notify callback after a request completes', async () => {
         const json = Promise.resolve({})
 
