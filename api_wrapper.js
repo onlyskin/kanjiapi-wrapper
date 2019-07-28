@@ -92,4 +92,7 @@ class ApiWrapper {
 
 module.exports = {
     ApiWrapper,
+    ERROR,
+    SUCCESS,
+    LOADING,
 }
