@@ -16,7 +16,8 @@ const { Kanjiapi } = require('kanjiapi-wrapper')
 const onchange = () => {
     // Ask kanjiapi instance for data again and trigger UI redraws
 }
-const kanjiapi = Kanjiapi.build(onchange)
+const kanjiapi = Kanjiapi.build()
+kanjiapi.addListener(onchange)
 
 const result = kanjiapi.getKanji('字')
 // { status: "LOADING", value: null }
@@ -29,7 +30,8 @@ const result = kanjiapi.getKanji('字')
 ### mithril.js example:
 [flems.io](https://flems.io/#0=N4IgZglgNgpgziAXAbVAOwIYFsZJAOgAsAXLKEAGhAGMB7NYmBvEAXwvW10QICsEqdBk2J4hcYgAIA1hjS8IGAA4RJAXkkBpOQuUR8AIwCu0ACYAKLPgBOMU9YwB3AJQBuADppP4qdvmqNYE9JEMkANwgYR0RJc2BJDGJiazgY+OpCDAdqRmtJVnzndQA+SSC0UMrJH0lbOCMoKQ1Zfz18AHMYYj8FcwysjByYa2dPYKqQ22Ijawq6huJ8CUSjOHU1DQByAGUAVQBhfYBRbe3NyQB+cYnKrHNNhs2KWvgF-DCMKCMYfBw5CDQ7Tgv2Ulhg-0BJUkd02UAgT2h4LQAPazjRkkQ1xuk1ejSWxBWaw2WwAMgB5ACCABEAJIAOQA4ucrhVsaFNiTaBhTCjzpjWWzJJsjtZrLRrJssexPKwxmgagAFDCddRlLH0AEQYgxOKSZaMQpQ-U-frZXKqzaAdW0nliIlEdfFjYa1KVkFi7ljKpsAUojMRkMQAJ5KGBqRgAD2IAF0bQKquVBSENWhfdrJDAjQTGPhTYNzRofgTrJ1Fh8vjAKJ6bmXvjFjTnMmbhpW49jpa3Qs4W9i7j0IM90o288M61mTUOhnlWF2sVGW7KvGgrFhaEYGOZTLRqEYcAxDLRTIHnkrOs5KCA4DBYDkIPQEDwAEwAFkQAAY2BwQJgcHgc3ABDQ9CMMwPBsHOIBwmg0j3qgX5cHgLS6CoAC0jgOEoIbWOeMzkDwJDEEoqQAPREWuSjSO0Oa0FgRGIYoKFocomEAAIAIz4K++AAGy0To9EQKh6GYb8AL4Pw55BiGeBwNQ1gQEoojsJwP48FgWqEHJ5BUDheD4YRiAkWRFFUTRanEBp0DMQ+HH4AAzERZkWVAIloGJAGSdwF6yfJilRqwQA)
 ```javascript
-const kanjiapi = Kanjiapi.build(m.redraw);
+const kanjiapi = Kanjiapi.build()
+kanjiapi.addListener(m.redraw)
 
 const Kanji = {
     view: ({ attrs: { character } }) => {

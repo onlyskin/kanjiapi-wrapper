@@ -7,13 +7,21 @@ const WORDS_PATH = 'words'
 const API_VERSION = 'v1'
 
 class ApiWrapper {
-    constructor(fetch, apiUrl, notify = () => {}) {
+    constructor(fetch, apiUrl) {
         this._fetch = fetch
         this._apiUrl = apiUrl
-        this._notify = notify
+        this._listeners = new Map()
 
         this._cache = new Map()
         this._pending = new Set()
+    }
+
+    addListener(name, listener) {
+        this._listeners.set(name, listener)
+    }
+
+    removeListener(name) {
+        this._listeners.delete(name)
     }
 
     getKanji(kanji) {
@@ -75,7 +83,9 @@ class ApiWrapper {
             },
         )
 
-        this._notify()
+        for (const listener of this._listeners.values()) {
+            listener()
+        }
     }
 
     _asSet(result) {

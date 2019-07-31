@@ -167,7 +167,7 @@ o.spec('ApiWrapper', () => {
             .deepEquals({ status: 'SUCCESS', value: ['a', 'b', 'c'] })
     })
 
-    o('calls notify callback after a request completes', async () => {
+    o('can register a listener callback', async () => {
         const json = Promise.resolve({})
 
         const response = Promise.resolve({
@@ -176,22 +176,88 @@ o.spec('ApiWrapper', () => {
         })
 
         const fetchSpy = o.spy(() => response)
-
-        const notifySpy = o.spy()
+        const listenerSpy = o.spy()
 
         const apiWrapper = new ApiWrapper(
             fetchSpy,
             apiUrl,
-            notifySpy,
         )
+
+        apiWrapper.addListener('one', listenerSpy)
 
         apiWrapper.getKanji('蜜')
 
-        o(notifySpy.callCount > 0).equals(false)
+        o(listenerSpy.callCount > 0).equals(false)
 
         await response
         await json
 
-        o(notifySpy.callCount > 0).equals(true)
+        o(listenerSpy.callCount > 0).equals(true)
+    })
+
+    o('can register a further callback', async () => {
+        const json = Promise.resolve({})
+
+        const response = Promise.resolve({
+            status: 200,
+            json: () => json,
+        })
+
+        const fetchSpy = o.spy(() => response)
+        const listenerSpyOne = o.spy()
+        const listenerSpyTwo = o.spy()
+
+        const apiWrapper = new ApiWrapper(
+            fetchSpy,
+            apiUrl,
+        )
+
+        apiWrapper.addListener('one', listenerSpyOne)
+        apiWrapper.addListener('two', listenerSpyTwo)
+
+        apiWrapper.getKanji('蜜')
+
+        o(listenerSpyOne.callCount > 0).equals(false)
+        o(listenerSpyTwo.callCount > 0).equals(false)
+
+        await response
+        await json
+
+        o(listenerSpyOne.callCount > 0).equals(true)
+        o(listenerSpyTwo.callCount > 0).equals(true)
+    })
+
+    o('can remove a listener', async () => {
+        const json = Promise.resolve({})
+
+        const response = Promise.resolve({
+            status: 200,
+            json: () => json,
+        })
+
+        const fetchSpy = o.spy(() => response)
+        const listenerSpyOne = o.spy()
+        const listenerSpyTwo = o.spy()
+
+        const apiWrapper = new ApiWrapper(
+            fetchSpy,
+            apiUrl,
+        )
+
+        apiWrapper.addListener('one', listenerSpyOne)
+        apiWrapper.addListener('two', listenerSpyTwo)
+
+        apiWrapper.getKanji('蜜')
+
+        o(listenerSpyOne.callCount > 0).equals(false)
+        o(listenerSpyTwo.callCount > 0).equals(false)
+
+        apiWrapper.removeListener('one')
+
+        await response
+        await json
+
+        o(listenerSpyOne.callCount > 0).equals(false)
+        o(listenerSpyTwo.callCount > 0).equals(true)
     })
 });
