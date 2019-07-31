@@ -18,13 +18,14 @@ const listener = () => {
 }
 
 const kanjiapi = Kanjiapi.build()
-kanjiapi.addListener(listener)
+kanjiapi.addListener('listener_name', listener)
 
 const result = kanjiapi.getKanji('字')
 // { status: "LOADING", value: null }
 
-// once the data is loaded, listener will be called
-// after this point calling kanjiapi.getKanji('字') returns:
+// once the data is loaded, any registered listener functions will be called
+// to notify the library client that there was a change
+// after this point calling kanjiapi.getKanji('字') returns the success result:
 // { status: "SUCCESS", value: { kanji: "字", ... } }
 ```
 
