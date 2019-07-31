@@ -1,13 +1,13 @@
 {
   "name": "kanjiapi-wrapper",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "unpkg": "kanjiapi-wrapper.min.js",
   "main": "kanjiapi-wrapper.js",
   "license": "MIT",
   "scripts": {
     "test": "ospec *.test.js",
     "lint": "jshint *.js",
-    "release": "./minify"
+    "release": "yarn test && ./minify && yarn publish"
   },
   "dependencies": {},
   "devDependencies": {
