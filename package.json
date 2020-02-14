@@ -2,21 +2,23 @@
   "name": "kanjiapi-wrapper",
   "version": "1.1.2",
   "unpkg": "kanjiapi-wrapper.min.js",
-  "main": "kanjiapi-wrapper.js",
+  "main": "dist/kanjiapi-wrapper.js",
+  "types": "dist/kanjiapi-wrapper.d.ts",
   "license": "MIT",
   "scripts": {
-    "test": "ospec *.test.js",
-    "lint": "jshint *.js",
-    "release": "yarn test && ./minify && yarn publish"
+    "build": "tsc",
+    "test": "yarn build && ospec dist/*.test.js",
+    "release": "yarn test && yarn build && ./minify && yarn publish"
   },
   "dependencies": {},
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "@types/ospec": "^4.0.2",
     "babel-preset-minify": "^0.5.0",
     "browserify": "^16.3.0",
-    "jshint": "^2.10.2",
-    "ospec": "^4.0.0"
+    "ospec": "^4.0.0",
+    "typescript": "^3.7.5"
   }
 }

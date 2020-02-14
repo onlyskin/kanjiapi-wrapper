@@ -1,11 +1,11 @@
-const o = require('ospec')
+import * as o from 'ospec'
 
-const { ApiWrapper } = require('./api_wrapper')
+import { ApiWrapper, Result, IWord, IKanji, IApiResponse } from './api_wrapper'
 
 o.spec('ApiWrapper', () => {
     const apiUrl = 'url'
 
-    const withFetchSpy = (status, result) => {
+    const withFetchSpy = (status: number, result?: any) => {
         const json = Promise.resolve(result)
         const response = Promise.resolve({
             status,
@@ -25,7 +25,7 @@ o.spec('ApiWrapper', () => {
     }
 
     o('caches results of fetch', async () => {
-        const { apiWrapper, fetch, response, json } = withFetchSpy(200, null)
+        const { apiWrapper, fetch, response, json } = withFetchSpy(200, null as IApiResponse)
 
         await response
         await json
@@ -41,13 +41,13 @@ o.spec('ApiWrapper', () => {
         const { apiWrapper, fetch, response, json } = withFetchSpy(404, null)
 
         o(apiWrapper.getJoyoSet())
-            .deepEquals({ status: 'LOADING', value: null })
+            .deepEquals({ status: Result.LOADING, value: null })
 
         await response
         await json
 
         o(apiWrapper.getJoyoSet())
-            .deepEquals({ status: 'ERROR', value: 404 })
+            .deepEquals({ status: Result.ERROR, value: 404 })
     })
 
     o('loads joyo kanji list', async () => {
@@ -55,82 +55,93 @@ o.spec('ApiWrapper', () => {
             200, ['a', 'b', 'c'])
 
         o(apiWrapper.getJoyoSet())
-            .deepEquals({ status: 'LOADING', value: null })
+            .deepEquals({ status: Result.LOADING, value: null })
 
         await response
         await json
 
-        o(fetch.calls[0].args[0]).equals('url/v1/kanji/joyo')
+        o((fetch.calls[0] as any).args[0]).equals('url/v1/kanji/joyo')
         const result = apiWrapper.getJoyoSet()
-        o(result.status).equals('SUCCESS')
-        o(result.value.size).equals(3)
-        o([...result.value]).deepEquals(['a', 'b', 'c'])
+        o(result.status).equals(Result.SUCCESS)
+        const actualValue = result.value as Set<string>
+        o(actualValue.size).equals(3)
+        o([...actualValue]).deepEquals(['a', 'b', 'c'])
     })
 
     o('loads jinmeiyo kanji', async () => {
         const { apiWrapper, fetch, response, json } = withFetchSpy(
-            200, [4, 5, 6])
+            200, ['4', '5', '6'])
 
         apiWrapper.getJinmeiyoSet()
         await response
         await json
 
-        o(fetch.calls[0].args[0]).equals('url/v1/kanji/jinmeiyo')
+        o((fetch.calls[0] as any).args[0]).equals('url/v1/kanji/jinmeiyo')
         const result = apiWrapper.getJinmeiyoSet()
-        o(result.status).equals('SUCCESS')
-        o(result.value.size).equals(3)
-        o([...result.value]).deepEquals([4, 5, 6])
+        o(result.status).equals(Result.SUCCESS)
+        const actualValue = result.value as Set<string>
+        o(actualValue.size).equals(3)
+        o([...actualValue]).deepEquals(['4', '5', '6'])
     })
 
+    const kanjiStub = {} as unknown as IKanji
+
     o('loads specific kanji', async () => {
-        const { apiWrapper, fetch, response, json } = withFetchSpy(200, {})
+        const { apiWrapper, fetch, response, json } = withFetchSpy(200, kanjiStub)
 
         apiWrapper.getKanji('蜜')
         await response
         await json
 
-        o(fetch.calls[0].args[0]).equals('url/v1/kanji/蜜')
+        o((fetch.calls[0] as any).args[0]).equals('url/v1/kanji/蜜')
         o(apiWrapper.getKanji('蜜'))
-            .deepEquals({ status: 'SUCCESS', value: {} })
+            .deepEquals({ status: Result.SUCCESS, value: kanjiStub })
     })
 
     o('doesnt trim kanji strings', async () => {
-        const { apiWrapper, fetch, response, json } = withFetchSpy(404, {})
+        const { apiWrapper, fetch, response, json } = withFetchSpy(404, kanjiStub)
 
         apiWrapper.getKanji('蜜蜜')
         await response
         await json
 
-        o(fetch.calls[0].args[0]).equals('url/v1/kanji/蜜蜜')
+        o((fetch.calls[0] as any).args[0]).equals('url/v1/kanji/蜜蜜')
         o(apiWrapper.getKanji('蜜蜜'))
-            .deepEquals({ status: 'ERROR', value: 404 })
+            .deepEquals({ status: Result.ERROR, value: 404 })
     })
 
     o('loads specific reading', async () => {
-        const { apiWrapper, fetch, response, json } = withFetchSpy(200, {})
+        const readingStub = {
+            reading: 'あり',
+            main_kanji: [],
+            name_kanji: [],
+        }
+
+        const { apiWrapper, fetch, response, json } = withFetchSpy(200, readingStub)
 
         apiWrapper.getReading('あり')
         await response
         await json
 
-        o(fetch.calls[0].args[0]).equals('url/v1/reading/あり')
+        o((fetch.calls[0] as any).args[0]).equals('url/v1/reading/あり')
         o(apiWrapper.getReading('あり')).
-            deepEquals({ status: 'SUCCESS', value: {} })
+            deepEquals({ status: Result.SUCCESS, value: readingStub })
     })
 
     o('loads grade 1 kanji list', async () => {
         const { apiWrapper, fetch, response, json } = withFetchSpy(
-            200, [1, 2, 3])
+            200, ['1', '2', '3'])
 
         apiWrapper.getListForGrade(1)
         await response
         await json
 
-        o(fetch.calls[0].args[0]).equals('url/v1/kanji/grade-1')
+        o((fetch.calls[0] as any).args[0]).equals('url/v1/kanji/grade-1')
         const result = apiWrapper.getListForGrade(1)
-        o(result.status).equals('SUCCESS')
-        o(result.value.size).equals(3)
-        o([...result.value]).deepEquals([1, 2, 3])
+        o(result.status).equals(Result.SUCCESS)
+        const actualValue = result.value as Set<string>
+        o(actualValue.size).equals(3)
+        o([...actualValue]).deepEquals(['1', '2', '3'])
     })
 
     o('loads grade 2 kanji list', async () => {
@@ -138,7 +149,7 @@ o.spec('ApiWrapper', () => {
 
         apiWrapper.getListForGrade(2)
 
-        o(fetch.calls[0].args[0]).equals('url/v1/kanji/grade-2')
+        o((fetch.calls[0] as any).args[0]).equals('url/v1/kanji/grade-2')
     })
 
     o('loads words for specific kanji', async () => {
@@ -149,9 +160,9 @@ o.spec('ApiWrapper', () => {
         await response
         await json
 
-        o(fetch.calls[0].args[0]).equals('url/v1/words/蜜')
+        o((fetch.calls[0] as any).args[0]).equals('url/v1/words/蜜')
         o(apiWrapper.getWordsForKanji('蜜'))
-            .deepEquals({ status: 'SUCCESS', value: ['a', 'b', 'c'] })
+            .deepEquals({ status: Result.SUCCESS, value: ['a', 'b', 'c'] as unknown as IWord[] })
     })
 
     o('loads arbitrary url', async() => {
@@ -162,9 +173,9 @@ o.spec('ApiWrapper', () => {
         await response
         await json
 
-        o(fetch.calls[0].args[0]).equals('url/v1/kanji/蜜')
+        o((fetch.calls[0] as any).args[0]).equals('url/v1/kanji/蜜')
         o(apiWrapper.getUrl('/kanji/蜜'))
-            .deepEquals({ status: 'SUCCESS', value: ['a', 'b', 'c'] })
+            .deepEquals({ status: Result.SUCCESS, value: ['a', 'b', 'c'] })
     })
 
     o('can register a listener callback', async () => {
