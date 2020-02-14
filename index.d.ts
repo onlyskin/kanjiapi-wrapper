@@ -1,11 +1,5 @@
 export as namespace Kanjiapi
 
-export enum Result {
-    ERROR = 'ERROR',
-    LOADING = 'LOADING',
-    SUCCESS = 'SUCCESS',
-}
-
 export interface IKanji {
   kanji: string;
   grade: number;
@@ -62,4 +56,10 @@ export namespace Kanjiapi {
     export const ERROR: string
     export const SUCCESS: string
     export const LOADING: string
+}
+
+export enum Result {
+    ERROR = 'ERROR',
+    LOADING = 'LOADING',
+    SUCCESS = 'SUCCESS',
 }
