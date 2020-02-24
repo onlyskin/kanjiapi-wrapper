@@ -2,15 +2,15 @@ export as namespace Kanjiapi
 
 export interface IKanji {
   kanji: string;
-  grade: number;
+  grade: number | null;
   stroke_count: number;
   meanings: string[];
   kun_readings: string[];
   on_readings: string[];
   name_readings: string[];
-  jlpt: number;
+  jlpt: number | null;
   unicode: string;
-  heisig_en: string;
+  heisig_en: string | null;
 }
 
 export interface IReading {
