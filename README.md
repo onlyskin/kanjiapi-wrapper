@@ -129,3 +129,8 @@ Returns the list of Jinmeiyō kanji result for the given grade
 
 `getWordsForKanji(kanji)`
 Returns a result containing a list of words for a given kanji
+
+## Development
+
+Development scripts are defined in `package.json` under `yarn test`, `yarn
+lint`, and `yarn release`.
