@@ -82,6 +82,51 @@ o.spec('ApiWrapper', () => {
         o([...result.value]).deepEquals([4, 5, 6])
     })
 
+    o('loads heisig kanji', async () => {
+        const { apiWrapper, fetch, response, json } = withFetchSpy(
+            200, [4, 5, 6])
+
+        apiWrapper.getHeisigSet()
+        await response
+        await json
+
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/heisig')
+        const result = apiWrapper.getHeisigSet()
+        o(result.status).equals('SUCCESS')
+        o(result.value.size).equals(3)
+        o([...result.value]).deepEquals([4, 5, 6])
+    })
+
+    o('loads all kanji', async () => {
+        const { apiWrapper, fetch, response, json } = withFetchSpy(
+            200, [4, 5, 6])
+
+        apiWrapper.getAllSet()
+        await response
+        await json
+
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/all')
+        const result = apiWrapper.getAllSet()
+        o(result.status).equals('SUCCESS')
+        o(result.value.size).equals(3)
+        o([...result.value]).deepEquals([4, 5, 6])
+    })
+
+    o('loads kyoiku kanji', async () => {
+        const { apiWrapper, fetch, response, json } = withFetchSpy(
+            200, [4, 5, 6])
+
+        apiWrapper.getKyoikuSet()
+        await response
+        await json
+
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/kyoiku')
+        const result = apiWrapper.getKyoikuSet()
+        o(result.status).equals('SUCCESS')
+        o(result.value.size).equals(3)
+        o([...result.value]).deepEquals([4, 5, 6])
+    })
+
     o('loads specific kanji', async () => {
         const { apiWrapper, fetch, response, json } = withFetchSpy(200, {})
 

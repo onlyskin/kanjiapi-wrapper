@@ -40,6 +40,18 @@ class ApiWrapper {
         return this._asSet(this._fromCache(`/${KANJI_PATH}/jinmeiyo`))
     }
 
+    getHeisigSet() {
+        return this._asSet(this._fromCache(`/${KANJI_PATH}/heisig`))
+    }
+
+    getAllSet() {
+        return this._asSet(this._fromCache(`/${KANJI_PATH}/all`))
+    }
+
+    getKyoikuSet() {
+        return this._asSet(this._fromCache(`/${KANJI_PATH}/kyoiku`))
+    }
+
     getListForGrade(grade) {
         return this._asSet(this._fromCache(`/${KANJI_PATH}/grade-${grade}`))
     }
