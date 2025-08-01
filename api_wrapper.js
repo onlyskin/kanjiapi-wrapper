@@ -56,6 +56,10 @@ class ApiWrapper {
         return this._asSet(this._fromCache(`/${KANJI_PATH}/grade-${grade}`))
     }
 
+    getListForJlpt(level) {
+        return this._asSet(this._fromCache(`/${KANJI_PATH}/jlpt-${level}`))
+    }
+
     getWordsForKanji(kanji) {
         return this._fromCache(`/${WORDS_PATH}/${kanji}`)
     }

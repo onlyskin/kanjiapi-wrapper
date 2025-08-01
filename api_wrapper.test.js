@@ -186,6 +186,14 @@ o.spec('ApiWrapper', () => {
         o(fetch.calls[0].args[0]).equals('url/v1/kanji/grade-2')
     })
 
+    o('loads level 1 jlpt list', async () => {
+        const { apiWrapper, fetch, response, json } = withFetchSpy(200)
+
+        apiWrapper.getListForJlpt(1)
+
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/jlpt-1')
+    })
+
     o('loads words for specific kanji', async () => {
         const { apiWrapper, fetch, response, json } = withFetchSpy(
             200, ['a', 'b', 'c'])

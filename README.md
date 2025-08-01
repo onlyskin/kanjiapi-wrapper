@@ -125,7 +125,10 @@ Returns the set of Jōyō kanji result
 Returns the set of Jinmeiyō kanji result
 
 `getListForGrade(grade)`
-Returns the list of Jinmeiyō kanji result for the given grade
+Returns the list of kanji result for the given grade
+
+`getListForJlpt(level)`
+Returns the list of kanji result for the given jlpt level
 
 `getWordsForKanji(kanji)`
 Returns a result containing a list of words for a given kanji
