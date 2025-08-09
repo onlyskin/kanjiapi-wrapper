@@ -33,31 +33,31 @@ class ApiWrapper {
     }
 
     getJoyoSet() {
-        return this._asSet(this._fromCache(`/${KANJI_PATH}/joyo`))
+        return this._fromCache(`/${KANJI_PATH}/joyo`, this._asSet)
     }
 
     getJinmeiyoSet() {
-        return this._asSet(this._fromCache(`/${KANJI_PATH}/jinmeiyo`))
+        return this._fromCache(`/${KANJI_PATH}/jinmeiyo`, this._asSet)
     }
 
     getHeisigSet() {
-        return this._asSet(this._fromCache(`/${KANJI_PATH}/heisig`))
+        return this._fromCache(`/${KANJI_PATH}/heisig`, this._asSet)
     }
 
     getAllSet() {
-        return this._asSet(this._fromCache(`/${KANJI_PATH}/all`))
+        return this._fromCache(`/${KANJI_PATH}/all`, this._asSet)
     }
 
     getKyoikuSet() {
-        return this._asSet(this._fromCache(`/${KANJI_PATH}/kyoiku`))
+        return this._fromCache(`/${KANJI_PATH}/kyoiku`, this._asSet)
     }
 
     getListForGrade(grade) {
-        return this._asSet(this._fromCache(`/${KANJI_PATH}/grade-${grade}`))
+        return this._fromCache(`/${KANJI_PATH}/grade-${grade}`, this._asSet)
     }
 
     getListForJlpt(level) {
-        return this._asSet(this._fromCache(`/${KANJI_PATH}/jlpt-${level}`))
+        return this._fromCache(`/${KANJI_PATH}/jlpt-${level}`, this._asSet)
     }
 
     getWordsForKanji(kanji) {
@@ -68,13 +68,13 @@ class ApiWrapper {
         return this._fromCache(url)
     }
 
-    _fromCache(path) {
+    _fromCache(path, transform) {
         if (this._cache.has(path)) {
             return this._cache.get(path)
         }
 
         if (!this._pending.has(path)) {
-            this._apiFetch(path)
+            this._apiFetch(path, transform)
         }
 
         return {
@@ -83,7 +83,11 @@ class ApiWrapper {
         }
     }
 
-    async _apiFetch(path) {
+    async _apiFetch(path, transform) {
+        if (transform === undefined) {
+          transform = a => a;
+        }
+
         this._pending.add(path)
 
         const response = await this._fetch(
@@ -91,12 +95,12 @@ class ApiWrapper {
 
         this._cache = this._cache.set(
             path,
-            {
+            transform({
                 status: response.status === 200 ? SUCCESS : ERROR,
                 value: response.status === 200 ?
                 await response.json() :
                 response.status,
-            },
+            }),
         )
 
         for (const listener of this._listeners.values()) {

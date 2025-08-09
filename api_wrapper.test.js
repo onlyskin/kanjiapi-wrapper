@@ -37,6 +37,19 @@ o.spec('ApiWrapper', () => {
         o(fetch.callCount).equals(2)
     })
 
+    o('applies transform func before caching', async () => {
+        const { apiWrapper, response, json } = withFetchSpy(200, ['a', 'b', 'c'])
+
+        apiWrapper.getJoyoSet()
+        await response
+        await json
+
+        const result = apiWrapper.getJoyoSet()
+
+        o(result.value.size).equals(3)
+        o([...result.value]).deepEquals(['a', 'b', 'c'])
+    })
+
     o('returns HTTP error code as record', async () => {
         const { apiWrapper, fetch, response, json } = withFetchSpy(404, null)
 
