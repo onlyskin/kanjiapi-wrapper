@@ -1,12 +1,12 @@
 #!/bin/bash
 
-TEMPDIR=`mktemp -d`
-BABEL=node_modules/.bin/babel
-BROWSERIFY=node_modules/.bin/browserify
+# Fail loudly rather than leaving a stale or missing bundle behind, so that
+# `yarn release` can't publish a broken build.
+set -euo pipefail
+
+ESBUILD=node_modules/.bin/esbuild
 OUT_FILE=kanjiapi-wrapper.min.js
 
-rm $OUT_FILE
-$BABEL *[^test].js --preset=@babel/env --presets minify --out-dir $TEMPDIR
-$BROWSERIFY --entry $TEMPDIR/browser.js --outfile $OUT_FILE
-
-rm -rf $TEMPDIR
+# es2017 leaves async/await untranspiled, matching the syntax level that the
+# previous babel/browserify pipeline shipped.
+$ESBUILD browser.js --bundle --minify --target=es2017 --outfile=$OUT_FILE

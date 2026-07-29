@@ -18,12 +18,13 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "babel-preset-minify": "^0.5.0",
-    "browserify": "^16.3.0",
-    "jshint": "^2.10.2",
-    "ospec": "^4.0.0"
+    "esbuild": "^0.28.1",
+    "jshint": "^2.13.6",
+    "ospec": "^4.2.1"
+  },
+  "resolutions": {
+    "brace-expansion": "^5.0.8",
+    "lodash": "^4.18.1",
+    "minimatch": "^3.1.5"
   }
 }
