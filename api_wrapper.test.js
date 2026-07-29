@@ -207,6 +207,108 @@ o.spec('ApiWrapper', () => {
         o(fetch.calls[0].args[0]).equals('url/v1/kanji/jlpt-1')
     })
 
+    o('loads enriched joyo kanji list', async () => {
+        const kanji = [{ kanji: 'a' }, { kanji: 'b' }, { kanji: 'c' }]
+        const { apiWrapper, fetch, response, json } = withFetchSpy(200, kanji)
+
+        o(apiWrapper.getJoyoEnriched())
+            .deepEquals({ status: 'LOADING', value: null })
+
+        await response
+        await json
+
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/joyo-enriched')
+        o(apiWrapper.getJoyoEnriched())
+            .deepEquals({ status: 'SUCCESS', value: kanji })
+    })
+
+    o('keeps enriched lists as ordered arrays', async () => {
+        const kanji = [{ kanji: 'c' }, { kanji: 'a' }, { kanji: 'b' }]
+        const { apiWrapper, response, json } = withFetchSpy(200, kanji)
+
+        apiWrapper.getAllEnriched()
+        await response
+        await json
+
+        const result = apiWrapper.getAllEnriched()
+        o(Array.isArray(result.value)).equals(true)
+        o(result.value.map(k => k.kanji)).deepEquals(['c', 'a', 'b'])
+    })
+
+    o('returns HTTP error code as record for enriched lists', async () => {
+        const { apiWrapper, response, json } = withFetchSpy(404, null)
+
+        apiWrapper.getJoyoEnriched()
+        await response
+        await json
+
+        o(apiWrapper.getJoyoEnriched())
+            .deepEquals({ status: 'ERROR', value: 404 })
+    })
+
+    o('loads enriched jinmeiyo kanji', async () => {
+        const { apiWrapper, fetch } = withFetchSpy(200)
+
+        apiWrapper.getJinmeiyoEnriched()
+
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/jinmeiyo-enriched')
+    })
+
+    o('loads enriched heisig kanji', async () => {
+        const { apiWrapper, fetch } = withFetchSpy(200)
+
+        apiWrapper.getHeisigEnriched()
+
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/heisig-enriched')
+    })
+
+    o('loads enriched all kanji', async () => {
+        const { apiWrapper, fetch } = withFetchSpy(200)
+
+        apiWrapper.getAllEnriched()
+
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/all-enriched')
+    })
+
+    o('loads enriched kyoiku kanji', async () => {
+        const { apiWrapper, fetch } = withFetchSpy(200)
+
+        apiWrapper.getKyoikuEnriched()
+
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/kyoiku-enriched')
+    })
+
+    o('loads enriched grade 2 kanji list', async () => {
+        const { apiWrapper, fetch } = withFetchSpy(200)
+
+        apiWrapper.getListForGradeEnriched(2)
+
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/grade-2-enriched')
+    })
+
+    o('loads enriched level 1 jlpt list', async () => {
+        const { apiWrapper, fetch } = withFetchSpy(200)
+
+        apiWrapper.getListForJlptEnriched(1)
+
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/jlpt-1-enriched')
+    })
+
+    o('caches enriched lists separately from plain lists', async () => {
+        const { apiWrapper, fetch, response, json } = withFetchSpy(200, [])
+
+        await response
+        await json
+        apiWrapper.getJoyoSet()
+        apiWrapper.getJoyoEnriched()
+        apiWrapper.getJoyoSet()
+        apiWrapper.getJoyoEnriched()
+
+        o(fetch.callCount).equals(2)
+        o(fetch.calls[0].args[0]).equals('url/v1/kanji/joyo')
+        o(fetch.calls[1].args[0]).equals('url/v1/kanji/joyo-enriched')
+    })
+
     o('loads words for specific kanji', async () => {
         const { apiWrapper, fetch, response, json } = withFetchSpy(
             200, ['a', 'b', 'c'])

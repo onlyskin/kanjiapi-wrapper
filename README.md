@@ -133,6 +133,39 @@ Returns the list of kanji result for the given jlpt level
 `getWordsForKanji(kanji)`
 Returns a result containing a list of words for a given kanji
 
+### Enriched lists
+
+Each kanji list also has an "enriched" variant, which returns the same list in
+the same order, but with the full kanji object for each character rather than
+the character on its own. Unlike the plain list methods, these results are
+ordered arrays rather than sets.
+
+```javascript
+const result = kanjiapi.getListForJlptEnriched(5)
+// { status: "SUCCESS", value: [{ kanji: "一", meanings: ["one"], ... }, ...] }
+```
+
+`getJoyoEnriched()`
+Returns the list of Jōyō kanji objects result
+
+`getJinmeiyoEnriched()`
+Returns the list of Jinmeiyō kanji objects result
+
+`getHeisigEnriched()`
+Returns the list of kanji objects which have a Heisig keyword result
+
+`getKyoikuEnriched()`
+Returns the list of Kyōiku kanji objects result
+
+`getAllEnriched()`
+Returns the list of all available kanji objects result
+
+`getListForGradeEnriched(grade)`
+Returns the list of kanji objects result for the given grade
+
+`getListForJlptEnriched(level)`
+Returns the list of kanji objects result for the given jlpt level
+
 ## Development
 
 Development scripts are defined in `package.json` under `yarn test`, `yarn

@@ -4,6 +4,7 @@ const LOADING = 'LOADING'
 const KANJI_PATH = 'kanji'
 const READING_PATH = 'reading'
 const WORDS_PATH = 'words'
+const ENRICHED_SUFFIX = '-enriched'
 const API_VERSION = 'v1'
 
 class ApiWrapper {
@@ -58,6 +59,36 @@ class ApiWrapper {
 
     getListForJlpt(level) {
         return this._fromCache(`/${KANJI_PATH}/jlpt-${level}`, this._asSet)
+    }
+
+    getJoyoEnriched() {
+        return this._fromCache(`/${KANJI_PATH}/joyo${ENRICHED_SUFFIX}`)
+    }
+
+    getJinmeiyoEnriched() {
+        return this._fromCache(`/${KANJI_PATH}/jinmeiyo${ENRICHED_SUFFIX}`)
+    }
+
+    getHeisigEnriched() {
+        return this._fromCache(`/${KANJI_PATH}/heisig${ENRICHED_SUFFIX}`)
+    }
+
+    getAllEnriched() {
+        return this._fromCache(`/${KANJI_PATH}/all${ENRICHED_SUFFIX}`)
+    }
+
+    getKyoikuEnriched() {
+        return this._fromCache(`/${KANJI_PATH}/kyoiku${ENRICHED_SUFFIX}`)
+    }
+
+    getListForGradeEnriched(grade) {
+        return this._fromCache(
+            `/${KANJI_PATH}/grade-${grade}${ENRICHED_SUFFIX}`)
+    }
+
+    getListForJlptEnriched(level) {
+        return this._fromCache(
+            `/${KANJI_PATH}/jlpt-${level}${ENRICHED_SUFFIX}`)
     }
 
     getWordsForKanji(kanji) {

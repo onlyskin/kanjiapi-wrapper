@@ -11,6 +11,8 @@ export interface IKanji {
   jlpt: number | null;
   unicode: string;
   heisig_en: string | null;
+  freq_mainichi_shinbun: number | null;
+  notes: string[];
 }
 
 export interface IReading {
@@ -46,13 +48,24 @@ export interface ApiWrapper {
   getReading(reading: string): IResult<IReading>;
   getJoyoSet(): IResult<Set<String>>;
   getJinmeiyoSet(): IResult<Set<String>>;
+  getHeisigSet(): IResult<Set<String>>;
+  getAllSet(): IResult<Set<String>>;
+  getKyoikuSet(): IResult<Set<String>>;
   getListForGrade(grade: number): IResult<Set<String>>;
-  getWordsForKanji(kanji: string): IResult<List<IWord>>;
-  getUrl(url: string): IResult<IKanji|IReading|Set<String>|List<IWord>>;
+  getListForJlpt(level: number): IResult<Set<String>>;
+  getJoyoEnriched(): IResult<IKanji[]>;
+  getJinmeiyoEnriched(): IResult<IKanji[]>;
+  getHeisigEnriched(): IResult<IKanji[]>;
+  getAllEnriched(): IResult<IKanji[]>;
+  getKyoikuEnriched(): IResult<IKanji[]>;
+  getListForGradeEnriched(grade: number): IResult<IKanji[]>;
+  getListForJlptEnriched(level: number): IResult<IKanji[]>;
+  getWordsForKanji(kanji: string): IResult<IWord[]>;
+  getUrl(url: string): IResult<IKanji|IReading|Set<String>|IKanji[]|IWord[]>;
 }
 
 export namespace Kanjiapi {
-    export function build(): ApiWrapper;
+    export function build(apiUrl?: string): ApiWrapper;
     export const ERROR: string
     export const SUCCESS: string
     export const LOADING: string
