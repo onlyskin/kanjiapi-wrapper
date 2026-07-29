@@ -3,6 +3,13 @@
   "version": "1.1.8",
   "unpkg": "kanjiapi-wrapper.min.js",
   "main": "kanjiapi-wrapper.js",
+  "files": [
+    "api_wrapper.js",
+    "kanjiapi-wrapper.js",
+    "browser.js",
+    "kanjiapi-wrapper.min.js",
+    "index.d.ts"
+  ],
   "license": "MIT",
   "scripts": {
     "test": "ospec *.test.js",
