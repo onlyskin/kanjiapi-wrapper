@@ -51,7 +51,7 @@ o.spec('ApiWrapper', () => {
     })
 
     o('returns HTTP error code as record', async () => {
-        const { apiWrapper, fetch, response, json } = withFetchSpy(404, null)
+        const { apiWrapper, response, json } = withFetchSpy(404, null)
 
         o(apiWrapper.getJoyoSet())
             .deepEquals({ status: 'LOADING', value: null })
@@ -192,7 +192,7 @@ o.spec('ApiWrapper', () => {
     })
 
     o('loads grade 2 kanji list', async () => {
-        const { apiWrapper, fetch, response, json } = withFetchSpy(200)
+        const { apiWrapper, fetch } = withFetchSpy(200)
 
         apiWrapper.getListForGrade(2)
 
@@ -200,7 +200,7 @@ o.spec('ApiWrapper', () => {
     })
 
     o('loads level 1 jlpt list', async () => {
-        const { apiWrapper, fetch, response, json } = withFetchSpy(200)
+        const { apiWrapper, fetch } = withFetchSpy(200)
 
         apiWrapper.getListForJlpt(1)
 

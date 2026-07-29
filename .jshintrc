@@ -2,10 +2,13 @@
     "undef": true,
     "unused": true,
     "eqeqeq": true,
+    "asi": true,
+    "browser": true,
+    "sub": true,
+    "strict": "implied",
     "globals": {
         "module": true,
-        "require": true,
-        "document": true
+        "require": true
     },
     "esversion": 8
 }
